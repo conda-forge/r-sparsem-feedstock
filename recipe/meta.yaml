@@ -1,5 +1,4 @@
-{% set version = "1.77" %}
-
+{% set version = '1.77' %}
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
 
@@ -10,37 +9,38 @@ package:
 source:
   fn: SparseM_{{ version }}.tar.gz
   url:
-    - https://cran.r-project.org/src/contrib/SparseM_{{ version }}.tar.gz
-    - https://cran.r-project.org/src/contrib/Archive/SparseM/SparseM_{{ version }}.tar.gz
-
-
+    - {{ cran_mirror }}/src/contrib/SparseM_{{ version }}.tar.gz
+    - {{ cran_mirror }}/src/contrib/Archive/SparseM/SparseM_{{ version }}.tar.gz
   sha256: a9329fef14ae4fc646df1f4f6e57efb0211811599d015f7bc04c04285495d45c
 
 build:
-  number: 0
-
+  merge_build_host: True  # [win]
+  number: 1
+  skip: true  # [win32]
   rpaths:
     - lib/R/lib/
     - lib/
-  skip: True  # [win32]
-
 
 requirements:
   build:
+    - {{ compiler('c') }}        # [not win]
+    - {{ compiler('fortran') }}  # [not win]
+    - {{native}}toolchain        # [win]
+    - {{posix}}filesystem        # [win]
+    - {{posix}}make
+    - {{posix}}sed               # [win]
+    - {{posix}}coreutils         # [win]
+    - {{posix}}zip               # [win]
+  host:
     - r-base
-    - posix                # [win]
-    - {{native}}toolchain  # [win]
-    - gcc                  # [not win]
-
   run:
     - r-base
+    - {{native}}gcc-libs         # [win]
 
 test:
   commands:
-    - $R -e "library('SparseM')"  # [not win]
+    - $R -e "library('SparseM')"           # [not win]
     - "\"%R%\" -e \"library('SparseM')\""  # [win]
-
-
 
 about:
   home: http://www.econ.uiuc.edu/~roger/research/sparse/sparse.html
@@ -48,11 +48,15 @@ about:
   summary: 'Some basic linear algebra functionality for sparse matrices is provided:  including
     Cholesky decomposition and backsolving as well as  standard R subsetting and Kronecker
     products.'
-
   license_family: GPL3
-
-
+  license_file: '{{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-3'  # [unix]
+  license_file: '{{ environ["PREFIX"] }}\R\share\licenses\GPL-3'  # [win]
 
 extra:
   recipe-maintainers:
     - croth1
+    - johanneskoester
+    - bgruening
+    - daler
+    - jdblischak
+    - cbrueffer
