@@ -1,4 +1,4 @@
-{% set version = '1.77' %}
+{% set version = "1.78" %}
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
 
@@ -11,11 +11,11 @@ source:
   url:
     - {{ cran_mirror }}/src/contrib/SparseM_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/SparseM/SparseM_{{ version }}.tar.gz
-  sha256: a9329fef14ae4fc646df1f4f6e57efb0211811599d015f7bc04c04285495d45c
+  sha256: d6b79ec881a10c91cb03dc23e6e783080ded9db4f2cb723755aa0d7d29a8b432
 
 build:
   merge_build_host: True  # [win]
-  number: 1003
+  number: 0
   skip: true  # [win32]
   rpaths:
     - lib/R/lib/
