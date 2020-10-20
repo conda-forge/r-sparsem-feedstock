@@ -7,7 +7,6 @@ package:
   version: {{ version|replace("-", "_") }}
 
 source:
-  fn: SparseM_{{ version }}.tar.gz
   url:
     - {{ cran_mirror }}/src/contrib/SparseM_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/SparseM/SparseM_{{ version }}.tar.gz
@@ -15,8 +14,7 @@ source:
 
 build:
   merge_build_host: True  # [win]
-  number: 1
-  skip: true  # [win32]
+  number: 2
   rpaths:
     - lib/R/lib/
     - lib/
@@ -45,19 +43,15 @@ test:
 
 about:
   home: http://www.econ.uiuc.edu/~roger/research/sparse/sparse.html
-  license: GPL (>= 2)
+  license: GPL-2.0-or-later
   summary: 'Some basic linear algebra functionality for sparse matrices is provided:  including
     Cholesky decomposition and backsolving as well as  standard R subsetting and Kronecker
     products.'
   license_family: GPL3
-  license_file: '{{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-3'
+  license_file:
+    - '{{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-3'
 
 extra:
   recipe-maintainers:
     - conda-forge/r
     - croth1
-    - johanneskoester
-    - bgruening
-    - daler
-    - jdblischak
-    - cbrueffer
